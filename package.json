@@ -1,0 +1,9 @@
+{
+  "name": "lattice-grid-demo-htmx-kanban",
+  "private": true,
+  "type": "module",
+  "description": "An htmx Kanban board over a server card table: a Lattice Grid demo",
+  "scripts": { "serve": "node tools/serve.mjs 8000", "verify": "node tools/verify.mjs" },
+  "dependencies": { "@toclocoinc/lattice-grid": "1.97.0" },
+  "devDependencies": { "puppeteer-core": "^24.0.0" }
+}

@@ -1,0 +1,27 @@
+body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #fff; color: #14171a; }
+header { padding: 14px 18px 8px; border-bottom: 1px solid #dfe3e6; }
+h1 { font-size: 1.25rem; margin: 0 0 6px; }
+h2 { font-size: 1rem; margin: 0 0 8px; }
+h3 { font-size: .875rem; margin: 16px 0 6px; }
+.lede { margin: 0 0 10px; color: #5b6570; max-width: 100ch; }
+.links { display: flex; gap: 18px; margin: 0 0 6px; font-weight: 600; }
+.links a { color: #1f6feb; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+.showcase { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; padding: 16px 18px; align-items: start; }
+.demo { min-width: 0; border: 1px solid #dfe3e6; border-radius: 8px; padding: 12px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+button { font: inherit; font-size: 13px; padding: 5px 12px; border: 1px solid #dfe3e6; border-radius: 6px; background: #fff; cursor: pointer; }
+button[aria-pressed="true"] { background: #2d6bff; color: #fff; border-color: #2d6bff; }
+.action { margin-left: auto; border-style: dashed; }
+.htmx-request { opacity: .6; }
+.steps { margin: 0; padding-left: 1.2rem; font-size: 13px; }
+.steps li { margin-bottom: 6px; }
+.log { list-style: none; margin: 6px 0 0; padding: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #5b6570; }
+footer { font-size: 12px; color: #5b6570; padding: 0 18px 18px; }
+footer a { color: #1f6feb; }
+[data-lattice-kanban] { --lattice-board-column-width: calc((100vw - 430px) / 3); }
+.status { margin: 10px 0 0; min-height: 1.45em; font-size: 13px; color: #5b6570; }
+.status:empty::before { content: "Nothing saved yet: drag a card."; }
+@media (max-width: 1500px) { [data-lattice-kanban] { --lattice-board-column-width: calc((100vw - 115px) / 3); } .showcase { grid-template-columns: 1fr; } aside { display: grid; grid-template-columns: 2fr 1fr; gap: 0 24px; } aside h2, aside ol { grid-column: 1; } aside h3, aside ul { grid-column: 2; grid-row: 1 / span 2; } aside ul { grid-row: 2; align-self: start; } }
+@media (max-width: 800px) { aside { display: block; } }
+@media (max-width: 800px) { [data-lattice-kanban] { --lattice-board-column-width: 260px; } }

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>htmx Kanban Board from a Server-Rendered Table | Lattice Grid</title>
+<meta name="description" content="An htmx Kanban board built from a server table: card moves posted with hx-post, a workflow rule refusing a drop, one card patched out of band, and Back.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.97.0/lattice-grid.min.css">
+<link rel="stylesheet" href="styles.css">
+<!-- The grid comes from the published package. To use a newer release, change the version in these lines. -->
+<script type="importmap">
+{ "imports": {
+  "@toclocoinc/lattice-grid/modules/htmx": "https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.97.0/modules/htmx.esm.min.js" } }
+</script>
+</head>
+<body>
+<header>
+  <h1>htmx Kanban board from a server-rendered table</h1>
+  <p class="lede">The server renders a plain card table for three teams; Lattice turns it into a Kanban board with no mount code, and htmx handles the swaps, the
+  out-of-band update and the save. A stand-in server answers htmx's requests in your browser, so nothing leaves the page.</p>
+  <p class="links"><a href="https://github.com/toclocoinc/lattice-grid-demo-htmx-kanban">Code on GitHub</a>
+  <a href="https://www.latticegrid.dev/htmx/">Lattice Grid with htmx</a></p>
+</header>
+<main class="showcase">
+  <div class="demo">
+    <div id="htmx-history" hx-history-elt>
+      <div id="kanban-view"><div class="view"><div class="filters"><button hx-get="/htmx-demo/kanban/cards?team=" hx-target="#kanban-view"
+      hx-push-url="/lattice-grid-demo-htmx-kanban/?team=" aria-pressed="true">All teams</button>
+  <button hx-get="/htmx-demo/kanban/cards?team=Growth" hx-target="#kanban-view"
+      hx-push-url="/lattice-grid-demo-htmx-kanban/?team=Growth" aria-pressed="false">Growth</button>
+  <button hx-get="/htmx-demo/kanban/cards?team=Platform" hx-target="#kanban-view"
+      hx-push-url="/lattice-grid-demo-htmx-kanban/?team=Platform" aria-pressed="false">Platform</button>
+  <button hx-get="/htmx-demo/kanban/cards?team=Support" hx-target="#kanban-view"
+      hx-push-url="/lattice-grid-demo-htmx-kanban/?team=Support" aria-pressed="false">Support</button><button class="action" hx-post="/htmx-demo/kanban/reassign" hx-vals='{"team": ""}' hx-swap="none">Server reassigns one card</button></div>
+<div data-lattice-kanban hx-post="/htmx-demo/kanban/move" hx-trigger="lattice:kanban-change"
+  hx-vals='js:{id: event.detail.id, from: event.detail.from, to: event.detail.to}'
+  hx-target="#save-status" hx-swap="innerHTML" style="height:calc(100vh - 300px); min-height:480px">
+  <table>
+    <thead><tr><th data-field="id">Ref</th><th data-field="title">Card</th><th data-field="owner">Owner</th>
+      <th data-field="status">Status</th><th data-field="points" data-type="number">Points</th></tr></thead>
+    <tbody>
+  <tr data-lattice-row="K-101" ><td>K-101</td><td>Audit the checkout funnel</td><td>Ana Lopez</td><td>done</td><td>5</td></tr>
+  <tr data-lattice-row="K-102" ><td>K-102</td><td>Redesign the pricing table</td><td>Dev Patel</td><td>doing</td><td>8</td></tr>
+  <tr data-lattice-row="K-103" ><td>K-103</td><td>Write the launch email</td><td>Chloe Marsh</td><td>doing</td><td>3</td></tr>
+  <tr data-lattice-row="K-104" ><td>K-104</td><td>Set up the A/B test</td><td>Ben Okafor</td><td>todo</td><td>5</td></tr>
+  <tr data-lattice-row="K-105" ><td>K-105</td><td>Landing page for the webinar</td><td>Eva Lindqvist</td><td>todo</td><td>8</td></tr>
+  <tr data-lattice-row="K-106" ><td>K-106</td><td>Segment the trial users</td><td>Ana Lopez</td><td>done</td><td>3</td></tr>
+  <tr data-lattice-row="K-107" ><td>K-107</td><td>Refresh the case studies</td><td>Chloe Marsh</td><td>done</td><td>5</td></tr>
+  <tr data-lattice-row="K-108" ><td>K-108</td><td>Referral programme brief</td><td>Gus Romero</td><td>todo</td><td>5</td></tr>
+  <tr data-lattice-row="K-109" ><td>K-109</td><td>Fix the sign-up form tracking</td><td>Dev Patel</td><td>doing</td><td>2</td></tr>
+  <tr data-lattice-row="K-110" ><td>K-110</td><td>Partner co-marketing plan</td><td>Hana Sato</td><td>todo</td><td>8</td></tr>
+  <tr data-lattice-row="K-111" ><td>K-111</td><td>Update the onboarding checklist</td><td>Eva Lindqvist</td><td>done</td><td>2</td></tr>
+  <tr data-lattice-row="K-112" ><td>K-112</td><td>Quarterly funnel report</td><td>Ben Okafor</td><td>doing</td><td>5</td></tr>
+  <tr data-lattice-row="K-113" ><td>K-113</td><td>Review the paid search budget</td><td>Gus Romero</td><td>todo</td><td>3</td></tr>
+  <tr data-lattice-row="K-201" ><td>K-201</td><td>Move billing to the new ledger</td><td>Ben Okafor</td><td>doing</td><td>13</td></tr>
+  <tr data-lattice-row="K-202" ><td>K-202</td><td>Rotate the API keys</td><td>Eva Lindqvist</td><td>done</td><td>2</td></tr>
+  <tr data-lattice-row="K-203" ><td>K-203</td><td>Cache the pricing lookups</td><td>Femi Adeyemi</td><td>doing</td><td>5</td></tr>
+  <tr data-lattice-row="K-204" ><td>K-204</td><td>Retire the v1 webhooks</td><td>Chloe Marsh</td><td>todo</td><td>8</td></tr>
+  <tr data-lattice-row="K-205" ><td>K-205</td><td>Database failover drill</td><td>Dev Patel</td><td>todo</td><td>2</td></tr>
+  <tr data-lattice-row="K-206" ><td>K-206</td><td>Upgrade the job queue</td><td>Femi Adeyemi</td><td>done</td><td>8</td></tr>
+  <tr data-lattice-row="K-207" ><td>K-207</td><td>Add rate limits to the public API</td><td>Hana Sato</td><td>doing</td><td>5</td></tr>
+  <tr data-lattice-row="K-208" ><td>K-208</td><td>Split the reporting database</td><td>Ben Okafor</td><td>todo</td><td>13</td></tr>
+  <tr data-lattice-row="K-209" ><td>K-209</td><td>Trace slow requests end to end</td><td>Gus Romero</td><td>doing</td><td>3</td></tr>
+  <tr data-lattice-row="K-210" ><td>K-210</td><td>Patch the image build pipeline</td><td>Ana Lopez</td><td>done</td><td>3</td></tr>
+  <tr data-lattice-row="K-211" ><td>K-211</td><td>Document the on-call runbook</td><td>Eva Lindqvist</td><td>todo</td><td>2</td></tr>
+  <tr data-lattice-row="K-212" ><td>K-212</td><td>Move logs to cold storage</td><td>Femi Adeyemi</td><td>todo</td><td>5</td></tr>
+  <tr data-lattice-row="K-213" ><td>K-213</td><td>Load test the checkout service</td><td>Dev Patel</td><td>done</td><td>5</td></tr>
+  <tr data-lattice-row="K-301" ><td>K-301</td><td>Triage the refund backlog</td><td>Hana Sato</td><td>doing</td><td>5</td></tr>
+  <tr data-lattice-row="K-302" ><td>K-302</td><td>Rewrite the password reset article</td><td>Chloe Marsh</td><td>done</td><td>2</td></tr>
+  <tr data-lattice-row="K-303" ><td>K-303</td><td>Set up the weekend rota</td><td>Gus Romero</td><td>done</td><td>3</td></tr>
+  <tr data-lattice-row="K-304" ><td>K-304</td><td>Add an order status macro</td><td>Ana Lopez</td><td>todo</td><td>2</td></tr>
+  <tr data-lattice-row="K-305" ><td>K-305</td><td>Survey customers after a closed ticket</td><td>Eva Lindqvist</td><td>doing</td><td>5</td></tr>
+  <tr data-lattice-row="K-306" ><td>K-306</td><td>Train the new starters on billing</td><td>Femi Adeyemi</td><td>doing</td><td>8</td></tr>
+  <tr data-lattice-row="K-307" ><td>K-307</td><td>Merge the duplicate help articles</td><td>Chloe Marsh</td><td>todo</td><td>3</td></tr>
+  <tr data-lattice-row="K-308" ><td>K-308</td><td>Escalation guide for enterprise accounts</td><td>Ben Okafor</td><td>todo</td><td>5</td></tr>
+  <tr data-lattice-row="K-309" ><td>K-309</td><td>Review the first-response targets</td><td>Hana Sato</td><td>done</td><td>2</td></tr>
+  <tr data-lattice-row="K-310" ><td>K-310</td><td>Tag tickets by product area</td><td>Gus Romero</td><td>doing</td><td>3</td></tr>
+  <tr data-lattice-row="K-311" ><td>K-311</td><td>Translate the top ten articles</td><td>Dev Patel</td><td>todo</td><td>8</td></tr>
+  <tr data-lattice-row="K-312" ><td>K-312</td><td>Chat hours for the holiday week</td><td>Ana Lopez</td><td>todo</td><td>2</td></tr>
+  <tr data-lattice-row="K-313" ><td>K-313</td><td>Customer health score pilot</td><td>Ben Okafor</td><td>doing</td><td>8</td></tr>
+    </tbody>
+  </table>
+  <i id="card-K-101" data-lattice-row="K-101"></i><i id="card-K-102" data-lattice-row="K-102"></i><i id="card-K-103" data-lattice-row="K-103"></i><i id="card-K-104" data-lattice-row="K-104"></i><i id="card-K-105" data-lattice-row="K-105"></i><i id="card-K-106" data-lattice-row="K-106"></i><i id="card-K-107" data-lattice-row="K-107"></i><i id="card-K-108" data-lattice-row="K-108"></i><i id="card-K-109" data-lattice-row="K-109"></i><i id="card-K-110" data-lattice-row="K-110"></i><i id="card-K-111" data-lattice-row="K-111"></i><i id="card-K-112" data-lattice-row="K-112"></i><i id="card-K-113" data-lattice-row="K-113"></i><i id="card-K-201" data-lattice-row="K-201"></i><i id="card-K-202" data-lattice-row="K-202"></i><i id="card-K-203" data-lattice-row="K-203"></i><i id="card-K-204" data-lattice-row="K-204"></i><i id="card-K-205" data-lattice-row="K-205"></i><i id="card-K-206" data-lattice-row="K-206"></i><i id="card-K-207" data-lattice-row="K-207"></i><i id="card-K-208" data-lattice-row="K-208"></i><i id="card-K-209" data-lattice-row="K-209"></i><i id="card-K-210" data-lattice-row="K-210"></i><i id="card-K-211" data-lattice-row="K-211"></i><i id="card-K-212" data-lattice-row="K-212"></i><i id="card-K-213" data-lattice-row="K-213"></i><i id="card-K-301" data-lattice-row="K-301"></i><i id="card-K-302" data-lattice-row="K-302"></i><i id="card-K-303" data-lattice-row="K-303"></i><i id="card-K-304" data-lattice-row="K-304"></i><i id="card-K-305" data-lattice-row="K-305"></i><i id="card-K-306" data-lattice-row="K-306"></i><i id="card-K-307" data-lattice-row="K-307"></i><i id="card-K-308" data-lattice-row="K-308"></i><i id="card-K-309" data-lattice-row="K-309"></i><i id="card-K-310" data-lattice-row="K-310"></i><i id="card-K-311" data-lattice-row="K-311"></i><i id="card-K-312" data-lattice-row="K-312"></i><i id="card-K-313" data-lattice-row="K-313"></i>
+</div>
+<script type="application/json" data-lattice-config>{"columnProperty":"status","transitions":{"todo":["doing"],"doing":["todo","done"],"done":["doing"]},"columns":[{"id":"todo","title":"Todo"},{"id":"doing","title":"Doing"},{"id":"done","title":"Done"}],"card":{"title":"title","subtitle":"owner"}}</script></div></div>
+      <p id="save-status" class="status" aria-live="polite"></p>
+    </div>
+  </div>
+  <aside>
+    <h2>Try the five steps</h2>
+    <ol class="steps">
+      <li><strong>Built on load.</strong> The cards were a server-rendered table; the board replaced it on load, with Todo, Doing and Done columns.</li>
+      <li><strong>Move a card.</strong> Drag a card to the next column. lattice:kanban-change is posted with hx-post and the server confirms below the board.</li>
+      <li><strong>A refused drop.</strong> Drag a Todo card straight to Done. The workflow rule refuses it, the card stays put and nothing is posted.</li>
+      <li><strong>Out of band.</strong> Press "Server reassigns one card". One card comes back out of band and its owner changes in place.</li>
+      <li><strong>Back.</strong> Pick a team, then press the browser Back button. The previous cards return, with the board rebuilt.</li>
+    </ol>
+    <h3>Requests the stand-in server answered</h3>
+    <ul id="request-log" class="log" aria-live="polite"><li>none yet</li></ul>
+  </aside>
+</main>
+<footer>Built with <a href="https://www.latticegrid.dev/htmx/">Lattice Grid</a>. No keys, no analytics.</footer>
+<script type="module" src="main.js"></script>
+</body>
+</html>
