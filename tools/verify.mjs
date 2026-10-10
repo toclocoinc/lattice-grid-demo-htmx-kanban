@@ -57,6 +57,15 @@ try {
   await sleep(2000);
   check(await page.evaluate(count) === 39 && (await page.$eval('#kanban-view button[aria-pressed=true]', (e) => e.textContent)) === 'All teams', 'Back: all teams return, with the board rebuilt');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal scroll');
+  const fit = await page.evaluate(() => {
+    const host = document.querySelector('#kanban-view .lat-kanban').parentElement;
+    const board = document.querySelector('#kanban-view .lat-kanban');
+    const cols = [...board.querySelectorAll('.lat-kanban__column')].map((c) => c.getBoundingClientRect());
+    return { host: { left: host.getBoundingClientRect().left, right: host.getBoundingClientRect().right }, sw: board.scrollWidth, cw: board.clientWidth, left: Math.min(...cols.map((r) => r.left)), right: Math.max(...cols.map((r) => r.right)), n: cols.length };
+  });
+  console.log(`board scrollWidth ${fit.sw} clientWidth ${fit.cw}; ${fit.n} columns span ${Math.round(fit.left)}-${Math.round(fit.right)} in host ${Math.round(fit.host.left)}-${Math.round(fit.host.right)}`);
+  check(fit.sw === fit.cw, 'board: no horizontal scrollbar');
+  check(fit.n > 0 && fit.host.right - fit.right < 40 && fit.left - fit.host.left < 40, 'board: columns fill the host');
   await page.screenshot({ path: process.env.SHOT || '/dev/null' });
   check(problems.length === 0, `no console errors or [lattice] warnings ${problems.join(' / ')}`);
 } finally {

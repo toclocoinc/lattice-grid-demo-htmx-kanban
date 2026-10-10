@@ -5,7 +5,7 @@
 import { installMockServer } from './src/mock-server.js';
 import { routes } from './src/server.js';
 
-const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.97.0';
+const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.98.0';
 const HTMX = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js';
 const HTMX_SRI = 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+';
 // Public, domain-bound key for toclocoinc.github.io; on localhost no key is needed.
@@ -23,8 +23,6 @@ const loadScript = (src, attrs = {}) => new Promise((resolve, reject) => {
 installMockServer(routes);
 await loadScript(GRID + '/modules/kanban.min.js');
 const lattice = await import('@toclocoinc/lattice-grid/modules/htmx');
-// One call licenses the script build; the htmx module is an ES module with its own copy, so it takes one more.
-globalThis.LatticeGrid?.setLicence(LICENCE);
 lattice.setLicence(LICENCE);
 await loadScript(HTMX, { integrity: HTMX_SRI, crossorigin: 'anonymous' });
 

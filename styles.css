@@ -19,9 +19,7 @@ button[aria-pressed="true"] { background: #2d6bff; color: #fff; border-color: #2
 .log { list-style: none; margin: 6px 0 0; padding: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #5b6570; }
 footer { font-size: 12px; color: #5b6570; padding: 0 18px 18px; }
 footer a { color: #1f6feb; }
-[data-lattice-kanban] { --lattice-board-column-width: calc((100vw - 430px) / 3); }
 .status { margin: 10px 0 0; min-height: 1.45em; font-size: 13px; color: #5b6570; }
 .status:empty::before { content: "Nothing saved yet: drag a card."; }
-@media (max-width: 1500px) { [data-lattice-kanban] { --lattice-board-column-width: calc((100vw - 115px) / 3); } .showcase { grid-template-columns: 1fr; } aside { display: grid; grid-template-columns: 2fr 1fr; gap: 0 24px; } aside h2, aside ol { grid-column: 1; } aside h3, aside ul { grid-column: 2; grid-row: 1 / span 2; } aside ul { grid-row: 2; align-self: start; } }
+@media (max-width: 1500px) { .showcase { grid-template-columns: 1fr; } aside { display: grid; grid-template-columns: 2fr 1fr; gap: 0 24px; } aside h2, aside ol { grid-column: 1; } aside h3, aside ul { grid-column: 2; grid-row: 1 / span 2; } aside ul { grid-row: 2; align-self: start; } }
 @media (max-width: 800px) { aside { display: block; } }
-@media (max-width: 800px) { [data-lattice-kanban] { --lattice-board-column-width: 260px; } }
