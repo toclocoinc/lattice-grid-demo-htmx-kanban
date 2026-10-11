@@ -46,7 +46,7 @@ const cards = [
 
 // SERVER TEMPLATE START
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
-const teams = ['Growth', 'Platform', 'Support'];
+export const teams = ['Growth', 'Platform', 'Support'];
 const columns = ['todo', 'doing', 'done'];
 
 /** The workflow: a card moves one step forward or back; nothing jumps from Todo straight to Done. */

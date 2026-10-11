@@ -18,7 +18,8 @@ const PACKAGE = /https:\/\/cdn\.jsdelivr\.net\/npm\/@toclocoinc\/lattice-grid@[\
 
 export function startServer({ port = 0, localDist = '' } = {}) {
   const server = createServer(async (request, response) => {
-    const path = decodeURIComponent((request.url || '/').split('?')[0]);
+    // Like GitHub Pages, answer the published path too, so a pushed URL can be reloaded.
+    const path = decodeURIComponent((request.url || '/').split('?')[0]).replace(/^\/lattice-grid-demo-htmx-kanban(?=\/)/, '');
     if (localDist && path.startsWith('/__grid/')) {
       return createReadStream(join(localDist, normalize(path.slice(7)))).on('error', () => response.writeHead(404).end('Not found'))
         .once('open', () => response.writeHead(200, { 'content-type': TYPES[extname(path)] || 'text/javascript; charset=utf-8', 'cache-control': 'no-store' }))

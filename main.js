@@ -3,9 +3,9 @@
 // itself last. htmx then processes the page and fires htmx:load for the
 // server-rendered table, which is what builds the board. No mount call anywhere.
 import { installMockServer } from './src/mock-server.js';
-import { routes } from './src/server.js';
+import { routes, kanbanFragment, teams } from './src/server.js';
 
-const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.98.0';
+const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.98.2';
 const HTMX = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js';
 const HTMX_SRI = 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+';
 // Public, domain-bound key for toclocoinc.github.io; on localhost no key is needed.
@@ -21,9 +21,18 @@ const loadScript = (src, attrs = {}) => new Promise((resolve, reject) => {
 });
 
 installMockServer(routes);
+
+// A server would answer this URL with the page for its query, so render that view
+// now, before the Lattice scripts load: the board is built once, for the right team.
+const team = new URLSearchParams(location.search).get('team');
+if (teams.includes(team)) document.getElementById('kanban-view').innerHTML = kanbanFragment(team);
+
 await loadScript(GRID + '/modules/kanban.min.js');
 const lattice = await import('@toclocoinc/lattice-grid/modules/htmx');
 lattice.setLicence(LICENCE);
+// htmx starts on DOMContentLoaded unless the page is already complete, so a script
+// added in between never starts. Wait for the load event before adding it.
+if (document.readyState !== 'complete') await new Promise((r) => { addEventListener('load', r, { once: true }); });
 await loadScript(HTMX, { integrity: HTMX_SRI, crossorigin: 'anonymous' });
 
 // The request log: one line per request the stand-in server answered.

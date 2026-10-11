@@ -66,6 +66,38 @@ try {
   console.log(`board scrollWidth ${fit.sw} clientWidth ${fit.cw}; ${fit.n} columns span ${Math.round(fit.left)}-${Math.round(fit.right)} in host ${Math.round(fit.host.left)}-${Math.round(fit.host.right)}`);
   check(fit.sw === fit.cw, 'board: no horizontal scrollbar');
   check(fit.n > 0 && fit.host.right - fit.right < 40 && fit.left - fit.host.left < 40, 'board: columns fill the host');
+  // A pushed URL is answered with its own view: fresh opens, and cached reloads after a click.
+  const TEAMS = { '': 39, Growth: 13, Platform: 13, Support: 13 };
+  const shows = (team) => page2.evaluate(() => ({ n: document.querySelectorAll('#kanban-view .lat-kanban__card').length,
+    on: [...document.querySelectorAll('#kanban-view button[aria-pressed=true]')].map((b) => b.textContent).join() }))
+    .then((v) => v.n === TEAMS[team] && v.on === (team || 'All teams'));
+  const built = (n) => page2.waitForFunction((k) => document.querySelectorAll('#kanban-view .lat-kanban__card').length === k, { timeout: 15000 }, n).then(() => true, () => false);
+  const page2 = await browser.newPage();
+  await page2.setViewport({ width: Number(process.env.WIDTH || 1440), height: Number(process.env.HEIGHT || 900) });
+  const problems2 = [];
+  page2.on('console', (m) => { if (m.type() === 'error' || /\[lattice\]/i.test(m.text())) problems2.push(m.text()); });
+  page2.on('pageerror', (e) => problems2.push(e.message));
+  const base = url.split('?')[0];
+  for (const team of Object.keys(TEAMS)) {
+    await page2.goto(team ? `${base}?team=${team}` : base);
+    check(await built(TEAMS[team]) && await shows(team), `fresh open ${team ? '?team=' + team : 'bare URL'}: the URL's view is built`);
+  }
+  for (const team of ['Growth', 'Platform', 'Support']) {
+    await page2.goto(base);
+    await built(39);
+    await page2.click(`button[hx-get*="team=${team}"]`);
+    await built(13);
+    let ok = true;
+    for (let i = 0; i < 10; i += 1) {
+      await page2.reload();
+      ok = await built(13) && await shows(team) && ok;
+    }
+    check(ok, `click ${team}, then 10 reloads: each builds the ${team} view`);
+    await page2.goBack();
+    await sleep(2000);
+    check(await built(39) && await shows(''), `click ${team}, reload, Back: all teams return, built`);
+  }
+  check(problems2.length === 0, `reload checks: no console errors or [lattice] warnings ${problems2.join(' / ')}`);
   await page.screenshot({ path: process.env.SHOT || '/dev/null' });
   check(problems.length === 0, `no console errors or [lattice] warnings ${problems.join(' / ')}`);
 } finally {
