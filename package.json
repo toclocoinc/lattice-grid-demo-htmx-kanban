@@ -8,7 +8,7 @@
     "verify": "node tools/verify.mjs"
   },
   "dependencies": {
-    "@toclocoinc/lattice-grid": "1.99.0"
+    "@toclocoinc/lattice-grid": "1.100.0"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"
