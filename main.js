@@ -5,7 +5,7 @@
 import { installMockServer } from './src/mock-server.js';
 import { routes, kanbanFragment, teams } from './src/server.js';
 
-const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.98.3';
+const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.99.0';
 const HTMX = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js';
 const HTMX_SRI = 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+';
 // Public, domain-bound key for toclocoinc.github.io; on localhost no key is needed.
@@ -27,7 +27,7 @@ installMockServer(routes);
 const team = new URLSearchParams(location.search).get('team');
 if (teams.includes(team)) document.getElementById('kanban-view').innerHTML = kanbanFragment(team);
 
-await loadScript(GRID + '/modules/kanban.min.js?v=20261011');
+await loadScript(GRID + '/modules/kanban.min.js?v=20261012');
 const lattice = await import('@toclocoinc/lattice-grid/modules/htmx');
 lattice.setLicence(LICENCE);
 // htmx starts on DOMContentLoaded unless the page is already complete, so a script
