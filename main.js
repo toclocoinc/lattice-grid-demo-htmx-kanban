@@ -5,7 +5,7 @@
 import { installMockServer } from './src/mock-server.js';
 import { routes, kanbanFragment, teams } from './src/server.js';
 
-const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.100.0';
+const GRID = 'https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.100.1';
 const HTMX = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js';
 const HTMX_SRI = 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+';
 // Public, domain-bound key for toclocoinc.github.io; on localhost no key is needed.
